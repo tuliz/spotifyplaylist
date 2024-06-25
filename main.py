@@ -1,5 +1,21 @@
 from bs4 import BeautifulSoup
 import requests
+import os
+from dotenv import load_dotenv
+import spotipy
+from spotipy.oauth2 import SpotifyOAuth
+
+#Get Enviroment Varaibles
+load_dotenv()
+CLIENT_ID = os.getenv('CLIENT_ID')
+CLIENT_SECRET = os.environ.get('CLIENT_SECRET')
+SPOTIPY_REDIRECT_URI = os.environ.get('SPOTIPY_REDIRECT_URI')
+
+#Authenticate to Spotify with spotipy package
+scope = "playlist-modify-private"
+sp = spotipy.Spotify(auth_manager=SpotifyOAuth(client_id=CLIENT_ID,client_secret=CLIENT_SECRET,scope=scope))
+user = sp.current_user()['id']
+#print(user['id'])
 
 #getting the year of choice to get the top songs of that time
 year_choice = input('what year you would like to travel to. type the date in YYY-MM-DD format: ')
@@ -10,8 +26,8 @@ response = requests.get(URL)
 response.raise_for_status()
 data = response.text
 
-with open('billabord.html', encoding='utf-8') as file:
-    data = file.read()
+# with open('billabord.html', encoding='utf-8') as file:
+#     data = file.read()
 
 #Start of Web Scraping with Beautiful Soup
 soup = BeautifulSoup(data,'html.parser')
