@@ -8,13 +8,10 @@ spotify = Spotify()
 year_choice = input('what year you would like to travel to. type the date in YYY-MM-DD format: ')
 
 # Sending a Get request to to get the HTML code of the website
-# URL =f'https://www.billboard.com/charts/hot-100/{year_choice}'
-# response = requests.get(URL)
-# response.raise_for_status()
-# data = response.text
-
-with open('billabord.html', encoding='utf-8') as file:
-    data = file.read()
+URL =f'https://www.billboard.com/charts/hot-100/{year_choice}'
+response = requests.get(URL)
+response.raise_for_status()
+data = response.text
 
 # Start of Web Scraping with Beautiful Soup
 soup = BeautifulSoup(data, 'html.parser')
@@ -31,7 +28,7 @@ singers_list_fix = [singer.getText().split('\t')[2].split('\n')[0] for singer in
 song_list = [{'singer': singers_list_fix[n], 'song_name': songs_list_fix[n]} for n in range(len(songs_list_fix) - 1)]
 
 # After getting the songs names and artist from billabord in a list create new spotify playlist
-#spotify.create_playlist(year_choice)
+spotify.create_playlist(year_choice)
 
 # Send the songs list from billabord and search spotify after the songs IDS
-spotify.find_songs_id(song_list)
+spotify.find_songs_url(song_list)
